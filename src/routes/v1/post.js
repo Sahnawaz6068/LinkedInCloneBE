@@ -1,9 +1,10 @@
 import express from 'express';
+import {authorize} from "../../middlewares/index.js"
+import Post from '../../controllers/index.js'
 
 const router = express.Router();
 
-router.get("/post",(req,res)=>{
-    res.send("Jab tak ke liye itna hi thik hai");
-})
+router.post("/createpPost",authorize.authorize,Post.postController.createPost);
+router.get("/feed",Post.postController.getPostsFeed);
 
 export default router;
