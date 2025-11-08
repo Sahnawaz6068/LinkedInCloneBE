@@ -27,7 +27,6 @@ const userDataValidation = (req, res, next) => {
       });
     }
 
-    // Password must be at least 6 characters and strong
     if (password.length < 6 || !validator.isStrongPassword(password)) {
       return res.status(400).json({
         success: false,
