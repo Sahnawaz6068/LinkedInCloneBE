@@ -13,14 +13,13 @@ function createToken(userId) {
 }
 
 function setTokenCookie(res, token) {
-
   res.cookie("token", token, {
-    httpOnly: true, 
-    sameSite: "strict",
-    maxAge: 7 * 24 * 60 * 60 * 1000,
+    httpOnly: true,
+    secure: true, // REQUIRED for cross-site (https)
+    sameSite: "None", // REQUIRED for cross-site
+    maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
   });
 }
-
 
 async function register(req, res) {
   try {
@@ -45,7 +44,7 @@ async function register(req, res) {
     delete userObj.password;
 
     const token = createToken(user._id);
-    setTokenCookie(res,token);
+    setTokenCookie(res, token); // Sets the corrected cookie
 
     return res.status(201).json({ user: userObj, token });
   } catch (err) {
@@ -72,7 +71,7 @@ async function login(req, res) {
     delete userObj.password;
 
     const token = createToken(user._id);
-    setTokenCookie(res,token);
+    setTokenCookie(res, token); // Sets the corrected cookie
 
     return res.status(200).json({ user: userObj, token });
   } catch (err) {
@@ -81,9 +80,6 @@ async function login(req, res) {
   }
 }
 
-//getUserProfile
-
-// controllers/userController.js
 const getUserProfile = async (req, res) => {
   try {
     const user = req.user;
@@ -102,10 +98,8 @@ const getUserProfile = async (req, res) => {
   }
 };
 
-
 export default {
   register,
   login,
-  getUserProfile
+  getUserProfile,
 };
- 
