@@ -8,11 +8,23 @@ const PORT = config.serverConfig.PORT;
 const connectionDB = config.dbConfig.connectDB;
 const app = express();
 
-const corsOptions = {
-  origin: 'http://localhost:5173', 
-  credentials: true, 
-};
+//Allowed list
+const allowedOrigins = [
+  'http://localhost:5173',
+  'https://devpost-delta.vercel.app'
+];
 
+
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
+};
 
 app.use(cors(corsOptions)); 
 app.use(express.json());
